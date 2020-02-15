@@ -2,25 +2,6 @@
   <div v-bind:style="{ background: activeColor}">
   <div class="container">
     <div class="b-row">
-      <div>
-		<br>
-        <h1>
-			Virgil Griffith's<br> legal fundraiser
-        </h1>
-        <hr>
-		<h6>
-		We are raising funds for the legal defense of Virgil Griffith, a cryptocurrency researcher and educator. Funds raised will go directly to the Griffith family to offset legal fees.
-		<br><br>
-
-		After presenting a cryptocurrency talk in North Korea in 2019, Virgil was charged by a US grand jury with conspiracy to violate the International Emergency Economic Powers Act. He was arrested and detained for six weeks, and has since been released on bail. Virgil is living with his family in Alabama while preparing for trial.
-
-		<br><br>
-
-		The indictment filing can be viewed at: <br><a href="https://www.scribd.com/document/44226123`7/Virgil-Griffith-Indictment" target="blank">https://www.scribd.com/document/44226123`7/Virgil-Griffith-Indictment</a>
-		</h6>
-		<hr>
-
-        <div>
 
           <label for="donation">
             <b>Donation</b>:
@@ -33,8 +14,6 @@
           />
         </div>
 		<br>
-      </div>
-    </div>
     <div class="b-row">
       <div>
         <b-button
@@ -55,8 +34,8 @@
     </div>
 	  <hr>
 	  <h6>
-	  Your donations are being held in an Ethereum smart contract at <a href="https://kovan.etherscan.io/address/0xe25776f5fb43d602e2829aa37d257fa35372e0cd#code" target="blank">0xE25776f5fB43d602e2829AA37D257fA35372e0Cd</a>. Its current balance is {{balance}} wei.<br><br>
-	  The balance can only be withdrawn by the key _______________________, which is verified to be held by Robert Griffith (father of Virgil Griffith).
+The current balance in the smart contract is {{balance}} wei.<br><br>
+
 	  </h6>
 	  <br><br>
 
