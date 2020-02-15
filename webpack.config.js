@@ -1,5 +1,8 @@
 var path = require('path')
 var webpack = require('webpack')
+const TerserPlugin = require('terser-webpack-plugin');
+const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
+const { VueLoaderPlugin } = require('vue-loader');
 
 module.exports = {
   entry: './src/main.js',
@@ -8,8 +11,20 @@ module.exports = {
     publicPath: '/dist/',
     filename: 'build.js'
   },
+
   module: {
+	rules: [
+		{
+		  test: /\.node$/,
+		  use: "node-loader"
+		}
+	  ],
     rules: [
+		{
+			test: /\.jsx?$/,
+			use: 'babel-loader',
+			exclude: path.resolve(__dirname, 'node_modules')
+		},
       {
         test: /\.css$/,
         use: [
@@ -28,7 +43,7 @@ module.exports = {
       {
         test: /\.js$/,
         loader: 'babel-loader',
-        exclude: /node_modules/
+        // exclude: /node_modules/
       },
       {
         test: /\.(png|jpg|gif|svg)$/,
@@ -38,6 +53,23 @@ module.exports = {
         }
       }
     ]
+  },
+
+  plugins: [
+	  new VueLoaderPlugin()
+// 	new UglifyJsPlugin({
+// 		uglifyOptions: {
+// 			warnings: false,
+// 			ie8: false,
+// 			output: {
+// 				comments: false
+// 			}
+// 		}
+// 	})
+  ],
+  optimization: {
+	  minimize: false,
+    minimizer: [new TerserPlugin()]
   },
   resolve: {
     alias: {
@@ -65,12 +97,17 @@ if (process.env.NODE_ENV === 'production') {
         NODE_ENV: '"production"'
       }
     }),
-    new webpack.optimize.UglifyJsPlugin({
-      sourceMap: true,
-      compress: {
-        warnings: false
-      }
-    }),
+    // new webpack.optimize.UglifyJsPlugin({
+	// 	warnings: false,
+	// 	ie8: false,
+	// 	output: {
+	// 		comments: false
+	// 	},
+    //   sourceMap: true,
+    //   compress: {
+    //     warnings: false
+    //   }
+    // }),
     new webpack.LoaderOptionsPlugin({
       minimize: true
     })
