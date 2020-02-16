@@ -4,7 +4,10 @@
     <div class="b-row">
 
           <label for="donation">
+			  <br>
+			  <h4>
             <b>Donation</b>:
+			  </h4>
           </label>
           <b-form-input
             id="donation"
@@ -33,10 +36,13 @@
       </div>
     </div>
 	  <hr>
-	  <h6>
-The current balance in the smart contract is {{balance}} wei.<br><br>
+	  <h4>
 
-	  </h6>
+You are on {{ chain }}. 
+<br><br>
+The current balance in the smart contract is {{balanceEther}} ether.
+
+	  </h4>
 	  <br><br>
 
     </div>
@@ -46,6 +52,7 @@ The current balance in the smart contract is {{balance}} wei.<br><br>
 <script>
 import web3 from '../contracts/web3';
 import crowdfundBox from '../contracts/crowdfundBoxInstance';
+import chains from './assets/chains.json'
 
 export default {
   name: 'APP',
@@ -54,13 +61,26 @@ export default {
 		activeColor: '#e6f2ff',
 		donation: '',
 		balance: '',
+		balanceEther: '',
 		isLoad: false,
 		donateStatus: "DONATE",
 		txHash: '',
-		txHashUrl: ''
+		txHashUrl: '',
+		chainId: '',
+		chain: '',
+		chainsList: chains
     };
   },
   beforeMount() {
+	web3.eth.net.getId().then((chainId) => {
+		this.chainId = chainId
+		for (let i = 0; i < this.chainsList.length; i++){
+			if (this.chainsList[i].networkId == chainId){
+				this.chain = this.chainsList[i].name
+			}
+		}
+	});
+
     // get crowdfundBox method: balance()
     crowdfundBox.methods
       .balance()
@@ -68,7 +88,8 @@ export default {
       .then((_balance) => {
         console.log(_balance);
         // set the balance of contract
-        this.balance = _balance;
+		this.balance = _balance;
+		this.balanceEther = web3.utils.fromWei(this.balance, 'ether');
     });
   },
   methods: {
@@ -83,6 +104,8 @@ export default {
 		.send({ from: accounts[0], value: donation });
 	  }).then((receipt)=>{
 		  this.isLoad = false;
+		  this.balance += donation;
+		  this.balanceEther = web3.utils.fromWei(this.balance, 'ether');
 		  this.txHash = 'txHash: ' + receipt.transactionHash;	this.txHashUrl = "https://kovan.etherscan.io/tx/" + receipt.transactionHash 
  
 	  }
@@ -106,8 +129,7 @@ export default {
 
 }
 
-h1,
-h2, h6 {
+h1, h2, h4 {
 	font-family: 'Courier New', Courier, monospace;
 	font-weight: normal;
 }
